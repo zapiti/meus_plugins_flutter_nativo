@@ -1,0 +1,39 @@
+buildscript {
+    ext.kotlin_version = '1.6.10'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.1.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1'
+    }
+}
+plugins {
+    id "com.google.cloud.artifactregistry.gradle-plugin" version "2.1.1"
+}
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    configurations {
+        implementation {
+            exclude group: 'com.google.android.gms', module: 'play-services-maps'
+        }
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

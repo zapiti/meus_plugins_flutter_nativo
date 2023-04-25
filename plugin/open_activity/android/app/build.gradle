@@ -1,0 +1,133 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.cloud.artifactregistry.gradle-plugin'
+
+ext {
+    androidxVersion = "1.7.0"
+    androidxLifecycleVersion = "2.5.1"
+    navSdkVersion = "4.2.0"
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterRoot = localProperties.getProperty('flutter.sdk')
+if (flutterRoot == null) {
+    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+
+android {
+    compileSdkVersion 32
+    ndkVersion flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com.open_activity.open_activity"
+        // You can update the following values to match your application needs.
+        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
+        minSdkVersion 23
+        targetSdkVersion 32
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.debug
+        }
+        all {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+flutter {
+    source '../..'
+}
+repositories {
+
+    google()
+
+    // Required for the NavSDK dependency
+    maven { url "artifactregistry://us-west2-maven.pkg.dev/gmp-artifacts/transportation" }
+}
+
+dependencies {
+
+
+
+    implementation "androidx.lifecycle:lifecycle-common-java8:${androidxLifecycleVersion}"
+    implementation "androidx.lifecycle:lifecycle-process:${androidxLifecycleVersion}"
+
+    implementation "com.google.android.maps:navsdk:4.2.0"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
+    implementation "androidx.lifecycle:lifecycle-common-java8:${androidxLifecycleVersion}"
+    implementation "androidx.lifecycle:lifecycle-process:${androidxLifecycleVersion}"
+
+
+    implementation "com.android.support:multidex:1.0.3"
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
+    implementation "com.google.android.datatransport:transport-api:3.0.0"
+    implementation "com.google.android.datatransport:transport-backend-cct:3.1.8"
+    implementation "com.google.android.datatransport:transport-runtime:3.1.8"
+    implementation "joda-time:joda-time:2.10.14"
+    // Also include the Google Places SDK, which is used by this example, but
+    // isn't required by the Navigation SDK.
+    implementation "com.google.android.libraries.places:places:3.0.0"
+    implementation "com.google.android.material:material:${androidxVersion}"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.7.20'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+
+    annotationProcessor "androidx.annotation:annotation:1.5.0"
+}

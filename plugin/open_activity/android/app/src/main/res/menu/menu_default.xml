@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/set_destination_menu_item"
+        android:onClick="showPlacePickerForDestination"
+        android:title="@string/set_destination_menu_option"
+        app:showAsAction="always|withText"/>
+    <item android:title="Nav Forwarding">
+        <item
+            android:onClick="startNavForwarding"
+            android:title="Start Nav Forwarding"/>
+        <item
+            android:onClick="stopNavForwarding"
+            android:title="Stop Nav Forwarding"/>
+    </item>
+</menu>

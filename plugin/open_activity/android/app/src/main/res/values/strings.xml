@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="maneuver_icon_description"
+        translatable="false">The icon for the maneuver.</string>
+    <string name="maneuver" translatable="false">Maneuver</string>
+    <string name="instruction" translatable="false">Instruction</string>
+    <string name="driving_side" translatable="false">Driving Side</string>
+    <string name="roundabout_turn_number" translatable="false">Rndabt Turn Num</string>
+    <string name="destination_eta" translatable="false">Destination ETA</string>
+    <string name="destination_remaining_distance" translatable="false">Distance Remaining</string>
+    <string name="timestamp" translatable="false">Timestamp</string>
+    <string name="current_step" translatable="false">Current Step</string>
+    <string name="previous_step" translatable="false">Prev Step</string>
+    <string name="next_step" translatable="false">Next Step</string>
+    <string name="maps_api_key" translatable="false">AIzaSyBPuFRT0hNHItOh7ttkf5g2Ua4bBSdSLDY</string>
+    <string name="set_destination_menu_option">Set Destination</string>
+</resources>
