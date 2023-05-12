@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() => runApp(new MyApp());
 
@@ -44,62 +45,111 @@ class _MethodChannelPageState extends State<MethodChannelPage> {
     return Future.value(true);
   }
 
+  final timerToUpdate = TextEditingController(text: '10');
+  final latInit = TextEditingController(text: '-18.895630');
+  final longInit = TextEditingController(text: '-48.278660');
+  final latEnd = TextEditingController(text: '-18.895630');
+  final longEnd = TextEditingController(text: '-48.282060');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(
-          '$count',
-          style: const TextStyle(fontSize: 40),
-        ),
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+          child: Padding(
+              padding: const EdgeInsets.all(10),
+              child:  Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          FloatingActionButton(
-            heroTag: null,
-            child: const Icon(Icons.edit_location_rounded),
+          // Text(
+          //   '$count',
+          //   style: const TextStyle(fontSize: 40),
+          // ),
+          TextField(
+            controller: timerToUpdate,
+            decoration:
+                InputDecoration(labelText: 'Duraçao em segundos do update'),
+          ),
+          TextField(
+            controller: latInit,
+            decoration: InputDecoration(labelText: 'Latitude inicial'),
+          ),
+          TextField(
+            controller: longInit,
+            decoration: InputDecoration(labelText: 'Longitude inicial'),
+          ),
+          TextField(
+            controller: latEnd,
+            decoration: InputDecoration(labelText: 'Latitude final'),
+          ),
+          TextField(
+            controller: longEnd,
+            decoration: InputDecoration(labelText: 'Longitude final'),
+          ),
+          ElevatedButton(
+            child: Row(
+              children: const [
+                Icon(Icons.edit_location_rounded),
+                Text('Navegar')
+              ],
+            ),
             onPressed: () async {
-              FlutterMethodChannel.startLocation(-18.895630, -48.278660);
-              Future.delayed(Duration(seconds: 10), () {
-                print('entro aqui ===============>');
-                FlutterMethodChannel.updateLocation(-18.895630, -48.278660);
+              if (await Permission.location.request().isGranted) {
+                FlutterMethodChannel.startLocation(
+                    double.tryParse(latInit.text) ?? -18.895630,
+                    double.tryParse(longInit.text) ?? -48.282060);
+                Future.delayed(
+                    Duration(seconds: int.tryParse(timerToUpdate.text) ?? 10),
+                    () {
+                  FlutterMethodChannel.updateLocation(
+                      double.tryParse(latEnd.text) ?? -18.895630,
+                      double.tryParse(longEnd.text) ?? -48.282060);
 
-                Future.delayed(Duration(seconds: 10), () {
-                  FlutterMethodChannel.updateLocation(-18.892720, -48.282060);
-                });
-              });
-            },
-          ),
-          const SizedBox(height: 10),
-          FloatingActionButton(
-            heroTag: null,
-            child: const Icon(Icons.add),
-            onPressed: () async {
-              int? _count = await FlutterMethodChannel.increment(count);
-              if (_count != null) {
-                setState(() {
-                  count = _count;
-                });
-              }
-            },
-          ),
-          const SizedBox(height: 10),
-          FloatingActionButton(
-            heroTag: null,
-            child: const Icon(Icons.remove),
-            onPressed: () async {
-              ///Flutter 调用 原生 代码
-              int? _count = await FlutterMethodChannel.decrement(count);
-              if (_count != null) {
-                setState(() {
-                  count = _count;
+                  Future.delayed(
+                      Duration(seconds: int.tryParse(timerToUpdate.text) ?? 10),
+                      () {
+                    FlutterMethodChannel.updateLocation(
+                        double.tryParse(latEnd.text) ?? -18.895630,
+                        double.tryParse(longEnd.text) ?? -48.282060);
+                  });
                 });
               }
             },
           ),
         ],
-      ),
+      ))),
+      // floatingActionButton: Column(
+      //   mainAxisAlignment: MainAxisAlignment.end,
+      //   children: [
+      //     const SizedBox(height: 10),
+      //     FloatingActionButton(
+      //       heroTag: null,
+      //       child: const Icon(Icons.add),
+      //       onPressed: () async {
+      //         int? _count = await FlutterMethodChannel.increment(count);
+      //         if (_count != null) {
+      //           setState(() {
+      //             count = _count;
+      //           });
+      //         }
+      //       },
+      //     ),
+      //     const SizedBox(height: 10),
+      //     FloatingActionButton(
+      //       heroTag: null,
+      //       child: const Icon(Icons.remove),
+      //       onPressed: () async {
+      //         ///Flutter 调用 原生 代码
+      //         int? _count = await FlutterMethodChannel.decrement(count);
+      //         if (_count != null) {
+      //           setState(() {
+      //             count = _count;
+      //           });
+      //         }
+      //       },
+      //     ),
+      //   ],
+      // ),
     );
   }
 }
